@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+string solution(string number, int k) {
+    string answer = "";
+    string save = number;
+    string save2 = number;
+    int max_size = number.size() - k;
+    int tmp = 0;
+    int now = 0;
+    int ap = 0;
+    while(k>0)
+    {
+        char max = '0';
+        for(int i=now;i<=k+now;i++)
+        {
+            if(number[i]>max)
+            {
+                max = number[i];
+                tmp = i;
+            }
+        }
+        if(max == '0') tmp = now;
+        k-= (tmp-now);
+        answer += to_string((int)(number[tmp]-'0'));
+        if(answer.size() == max_size)
+        {
+            save = "";
+            break;
+        }
+        
+        if(tmp+1 < number.size()) save = number.substr(tmp+1);
+        else
+        {
+            save = "";
+            break;
+        }
+        now = tmp+1;
+    }
+    answer += save;
+    
+    return answer;
+}
