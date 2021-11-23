@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<int> people, int limit) {
+    int answer = 0;
+    int max_size = people.size();
+    int left = 0;
+    int right = max_size - 1;
+    sort(people.begin(),people.end());
+    for(;left<right;left++)
+    {
+        while(people[left] + people[right] > limit)
+        {
+            right--;
+            answer++;
+            if(left==right)
+            {
+                answer++;
+                break;
+            }
+        }
+        if(left!=right)
+        { 
+            right--;
+            answer++;
+            if(left==right-1) answer++;
+        }
+        
+    }
+    return answer;
+}
