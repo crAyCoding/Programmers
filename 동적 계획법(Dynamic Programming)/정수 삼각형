@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+
+int solution(vector<vector<int>> triangle) {
+    int answer = 0;
+    int height = triangle.size();
+    int save[500][500] = {};
+    save[0][0] = triangle[0][0];
+    save[1][0] = triangle[0][0] + triangle[1][0];
+    save[1][1] = triangle[0][0] + triangle[1][1];
+    for(int i=2;i<triangle.size();i++)
+    {
+        for(int j=0;j<=i;j++)
+        {
+            if(j==0)
+            {
+                save[i][j] = save[i-1][j] + triangle[i][j];
+            }
+            else if(j==i)
+            {
+                save[i][j] = save[i-1][j-1] + triangle[i][j];
+            }
+            else
+            {
+                if(save[i-1][j-1]>save[i-1][j])
+                    save[i][j] = save[i-1][j-1] + triangle[i][j];
+                else save[i][j] = save[i-1][j] + triangle[i][j];
+            }
+        }
+    }
+    for(int k=0;k<height;k++)
+    {
+        if(answer < save[height-1][k])
+        {
+            answer = save[height-1][k];
+        }
+    }
+    
+    
+    return answer;
+}
