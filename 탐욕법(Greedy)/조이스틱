@@ -1,0 +1,63 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(string name) {
+    int answer = 0;
+    int left = 0, right = 0;
+    int maxA = 0, nowA = 0;;
+    for(int i=0;i<name.size();i++)
+    {
+        nowA = 0;
+        while(name[i]=='A')
+        {
+            nowA++;
+            i++;
+            if(i==name.size()) break;
+        }
+        if(maxA < nowA)
+        {
+            maxA = nowA;
+            right = name.size()-i;
+            left = i-nowA-1;
+            if(left<0) left = 0;
+        }
+    }
+    if(left>right && left!=0 && right!=0)
+    {
+        answer += name.size()-1;
+    }
+    else if(left<right && left!=0 && right!=0)
+    {
+        answer += left*2 + right;
+    }
+    else if(left==0 && right==0)
+    {
+        answer += name.size()-1;
+        if(name[0]=='A') answer = 0;
+    }
+    else
+    {
+        if(name[0]=='A'&&name[name.size()-1]=='A'&&left>right) answer += left;
+        else if(name[0]=='A'&&name[name.size()-1]=='A') answer += right-1;
+        else answer += right;
+    }
+    cout << left << right << endl;
+    
+    
+    for(int i=0;i<name.size();i++)
+    {
+        if(name[i]>'N')
+        {
+            answer += (int)('Z'-name[i]) + 1;
+        }
+        else
+        {
+            answer += (int)(name[i]-'A');
+        }
+    }
+    
+    return answer;
+}
