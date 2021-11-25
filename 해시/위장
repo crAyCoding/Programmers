@@ -1,0 +1,34 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+int solution(vector<vector<string>> clothes) {
+    int answer = 0;
+    map <string,int> clo;
+    int cnt = 0;
+    for(vector<string> str : clothes)
+    {
+        auto now = clo.find(str[1]);
+        if(now!=clo.end())
+        {
+            now->second++;
+        }
+        else
+        {
+            clo.insert(make_pair(str[1],1));
+        }
+    }
+    answer++;
+    for(auto iter = clo.begin();iter != clo.end();iter++)
+    {
+        answer *= ((iter->second)+1);
+    }
+    answer--;
+    
+        
+    return answer;
+}
