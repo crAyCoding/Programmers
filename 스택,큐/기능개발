@@ -1,0 +1,30 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(vector<int> progresses, vector<int> speeds) {
+    vector<int> answer;
+    vector<int> time;
+    for(int i=0;i<progresses.size();i++)
+    {
+        int left = 100 - progresses[i];
+        if(left%speeds[i]==0) time.push_back(left/speeds[i]);
+        else time.push_back((left/speeds[i])+1);
+    }
+    for(int i=0;i<time.size();i++)
+    {
+        int j = 1;
+        while(time[i]>=time[i+j] && i+j != time.size())
+        {
+            j++;
+        }
+        answer.push_back(j);
+        i+=(j-1);
+    }
+    
+    
+    
+    return answer;
+}
