@@ -1,0 +1,27 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+
+bool compare(string s1, string s2)
+{
+    return s1+s2>s2+s1;
+}
+
+string solution(vector<int> numbers) {
+    string answer = "";
+    vector<string> arr;
+    for(int t : numbers)
+    {
+        arr.push_back(to_string(t));
+    }
+    sort(arr.begin(),arr.end(),compare);
+    for(string k : arr)
+    {
+        answer += k;
+    }
+    if(arr[0]=="0") answer = "0";
+    return answer;
+}
