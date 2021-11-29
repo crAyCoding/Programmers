@@ -1,0 +1,37 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <queue>
+#include <functional>
+
+using namespace std;
+
+int solution(vector<int> scoville, int K) {
+    int answer = 0;
+    bool maxi = false;
+    priority_queue<int,vector<int>,greater<int>> mini;
+    for(int t : scoville)
+    {
+        if(t<K) mini.push(t);
+    }
+    int mixed;
+    if(mini.size()==scoville.size()) maxi = true;
+    while(mini.size()>=3)
+    {
+        mixed = mini.top(); mini.pop();
+        mixed += mini.top()*2; mini.pop();
+        answer++;
+        if(mixed<K) mini.push(mixed);
+    }
+    mixed = mini.top(); mini.pop();
+    mixed += mini.top()*2; mini.pop();
+    if(mixed >= K) answer++;
+    else
+    {
+        if(maxi) answer = -1;
+        else answer += 2;
+    }
+    
+    return answer;
+}
