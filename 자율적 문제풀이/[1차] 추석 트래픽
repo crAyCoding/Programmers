@@ -1,0 +1,60 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <map>
+#include <sstream>
+
+using namespace std;
+
+struct intt 
+{
+    int s, t;
+};
+
+int solution(vector<string> lines) {
+    int answer = 0;
+    string now = "";
+    string time = "";
+    int hr,mn,sc,msc;
+    vector<intt> timing;
+    
+    for(string k : lines)
+    {
+        stringstream aa(k);
+        double ass;
+        aa >> now >> now;
+        double take;
+        aa >> take;
+        int t_start, t_end;
+        int taketime = (int)(take*1000);
+        
+        hr = stoi(now.substr(0,2)) * 3600;
+        mn = stoi(now.substr(3,2)) * 60;
+        sc = stoi(now.substr(6,2));
+        msc = stoi(now.substr(9,3));
+        t_start = (( hr + mn + sc ) * 1000 + msc) - taketime + 1;
+        t_end = (( hr + mn + sc ) * 1000 + msc) + 999;
+        
+        timing.push_back({t_start,0});
+        timing.push_back({t_end,1});
+        
+    }
+    sort(timing.begin(),timing.end(),[&timing](intt&i,intt&j)
+    {
+        if(i.s != j.s) return i.s < j.s;
+        return i.t < j.t;
+    });
+    
+    int cnt = 0;
+    
+    for (int i=0;i<timing.size();i++)
+    {
+        if(timing[i].t == 0) cnt++;
+        else cnt--;
+        if(cnt>answer) answer = cnt;
+    }
+    
+    
+    return answer;
+}
