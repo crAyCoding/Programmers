@@ -40,7 +40,7 @@ int solution(vector<string> lines) {
         timing.push_back({t_end,1});
         
     }
-    sort(timing.begin(),timing.end(),[&timing](intt&i,intt&j)
+    sort(timing.begin(),timing.end(),[&timing](intt&i,intt&j) // 중간 sort 부분은 https://softworking.tistory.com/379 에서 도움 받음. 나머진 직접 풀이
     {
         if(i.s != j.s) return i.s < j.s;
         return i.t < j.t;
