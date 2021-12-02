@@ -1,0 +1,27 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+string solution(int n) {
+    string answer = "";
+    int k = 3;
+    int cnt = 1;
+    n--;
+    
+    
+    while(true)
+    {
+        int t = n%k;
+        if(t==0 || t ==1) t++;
+        else if(t==2) t+=2;
+        answer += to_string(t);
+        n /= k;
+        if(n<=0) break;
+        n--;
+    }
+    reverse(answer.begin(),answer.end());
+    return answer;
+}
