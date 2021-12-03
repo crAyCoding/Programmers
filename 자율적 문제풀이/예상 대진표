@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+int solution(int n, int a, int b)
+{
+    int answer = 0 ;
+    int qq = n;
+    while(qq>1)
+    {
+        qq/=2; answer++;
+    }
+    // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
+    while(n>1)
+    {
+        n/=2;
+        if(a<=n&&b<=n) 
+        {
+            answer--;
+        }
+        else if(a>n&&b>n)
+        {
+            a-=n;
+            b-=n;
+            answer--;
+        }
+        else break;
+    }
+    
+    return answer;
+}
