@@ -1,0 +1,38 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int gdp(int a, int b)
+{
+    int max = 1;
+    if(a>b)
+    {
+        for(int i=2;i<=b;i++)
+        {
+            if(a%i==0&&b%i==0) max = i;
+        }
+    }
+    else
+    {
+        for(int i=2;i<=a;i++)
+        {
+            if(a%i==0&&b%i==0) max = i;
+        }
+    }
+    return max;
+}
+
+int solution(vector<int> arr) {
+    int answer = arr.back();
+    arr.pop_back();
+    int siz = arr.size();
+    for(int i=0;i<siz;i++)
+    {
+        int tmp = arr.back();
+        answer = answer * tmp / gdp(answer,tmp
+        arr.pop_back();
+    }
+    return answer;
+}
