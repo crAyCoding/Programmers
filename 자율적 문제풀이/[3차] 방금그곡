@@ -1,0 +1,91 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+struct info
+{
+    int st, ti;
+    string tt, c;
+};
+
+bool cmp(const info &a, const info &b)
+{
+    if(a.ti<b.ti) return false;
+    else if(a.ti == b.ti)
+    {
+        if(a.st < b.st) return true;
+        else return false;
+    }
+    else return true;
+}
+
+
+string solution(string m, vector<string> musicinfos) {
+    string answer = "(None)";
+    vector<info> save;
+    for(int i=0;i<m.size();i++)
+    {
+        if(m[i]=='#')
+        {
+            m[i-1] += 32;
+            m.erase(i,1);
+            i--;
+        }
+    }
+    for(string now : musicinfos)
+    {
+        info a;
+        string start,end,title,code;
+        int first = now.find(",");
+        start = now.substr(0,first);
+        now = now.substr(first+1,now.size()-first-1);
+        int second = now.find(",");
+        end = now.substr(0,second);
+        now = now.substr(second+1,now.size()-second-1);
+        int third = now.find(",");
+        title = now.substr(0,third);
+        code = now.substr(third+1,now.size()-third-1);
+        for(int i=0;i<code.size();i++)
+        {
+            if(code[i]=='#')
+            {
+                code[i-1] += 32;
+                code.erase(i,1);
+                i--;
+            }
+        }
+        int start_time = stoi(start.substr(0,2))*60 + stoi(start.substr(3,2));
+        int end_time = stoi(end.substr(0,2))*60 + stoi(end.substr(3,2));
+        int time = end_time - start_time;
+        int multi = 0;
+        string no_code = code;
+        if(code.size()<time)
+        {
+            multi = (time / code.size()) + 1;
+        }
+        for(int i=1;i<=multi;i++)
+        {
+            code += no_code;
+        }
+        code = code.substr(0,time);
+        a.st = start_time;
+        a.ti = time;
+        a.tt = title;
+        a.c = code;
+        save.push_back(a);
+    }
+    sort(save.begin(),save.end(),cmp);
+    for(info t : save)
+    {
+        if(t.c.find(m)!=string::npos)
+        {
+            answer = t.tt;
+            break;
+        }
+    }
+    
+    return answer;
+}
