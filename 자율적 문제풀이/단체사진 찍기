@@ -1,0 +1,60 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+int solution(int n, vector<string> data) {
+    int answer = 0;
+    string t = "ACFJMNRT";
+    struct info
+    {
+        char a,b;
+        int c,n;
+    };
+    vector<info> save;
+    for(string v : data)
+    {
+        info inf;
+        inf.a = v[0];
+        inf.b = v[2];
+        inf.c = v[3] - 60;
+        inf.n = v[4]-'0' + 1;
+        save.push_back(inf);
+    }
+    
+    
+    do{
+        bool tmp = true;
+        
+        for(info f : save)
+        {
+            int pp, qq;
+            for(int i=0;i<8;i++)
+            {
+                if(t[i]==f.a) pp = i;
+                if(t[i]==f.b) qq = i;
+            }
+            int gg = abs(pp-qq);
+            if(f.c==0)
+            {
+                if(gg >= f.n) tmp = false;
+            }
+            else if(f.c==1)
+            {
+                if(gg != f.n) tmp = false;
+            }
+            else
+            {
+                if(gg <= f.n) tmp = false;
+            }
+            
+        }
+        
+        if(tmp) answer++;
+    }while(next_permutation(t.begin(),t.end()));
+    return answer;
+}
