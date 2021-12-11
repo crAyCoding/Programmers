@@ -1,0 +1,131 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <stdlib.h>
+#include <map>
+
+using namespace std;
+
+struct arr
+{
+    int num;
+    bool exist;
+    struct arr* prev = NULL;
+    struct arr* next = NULL;
+};
+
+
+
+string solution(int n, int k, vector<string> cmd) {
+    string answer = "";
+    
+    arr* save = (arr*)calloc(n,sizeof(arr));
+    for(int i=0;i<n;i++)
+    {
+        save[i].num = i;
+        save[i].exist = true;
+        if(i==0)
+        {
+            save[i].next = &save[i+1];
+        }
+        else if(i==n-1)
+        {
+            save[i].prev = &save[i-1];
+        }
+        else
+        {
+            save[i].prev = &save[i-1];
+            save[i].next = &save[i+1];
+        }
+    }
+    
+    
+    vector<arr*> stack;
+    arr* now = &save[k];
+    for(string t : cmd)
+    {
+        
+        if(t == "C")
+        {
+            if(now->prev==NULL)
+            {
+                now->next->prev = NULL;
+                now->exist = false;
+                stack.push_back(now);
+                now = now->next;
+            }
+            else if(now->next==NULL)
+            {
+                now->prev->next = NULL;
+                now->exist = false;
+                stack.push_back(now);
+                now = now->prev;
+            }
+            else
+            {
+                now->prev->next = now->next;
+                now->next->prev = now->prev;
+                now->exist = false;
+                stack.push_back(now);
+                now = now->next;
+            }
+        }
+        else if(t == "Z")
+        {
+            arr* rev = stack.back();
+            if(rev->prev == NULL)
+            {
+                rev->next->prev = rev;
+                rev->exist = true;
+            }
+            else if(rev->next == NULL)
+            {
+                rev->prev->next = rev;
+                rev->exist = true;
+            }
+            else
+            {
+                rev->prev->next = rev;
+                rev->next->prev = rev;
+                rev->exist = true;
+            }
+            stack.pop_back();
+        }
+        
+        else if(t[0]=='U')
+        {
+            int num = stoi(t.substr(2,t.size()-2));
+            for(int i=0;i<num;i++)
+            {
+                now = now->prev;
+            }
+        }
+        else
+        {
+            int num = stoi(t.substr(2,t.size()-2));
+            for(int i=0;i<num;i++)
+            {
+                now = now->next;
+            }
+        }
+        
+        
+        /*
+        for(int i=0;i<n;i++)
+        {
+            cout << save[i].exist;
+        }
+        cout << "\t" << now->num << endl;
+        */
+        
+    }
+    
+    for(int i=0;i<n;i++)
+    {
+        if(save[i].exist == true) answer += 'O';
+        else answer += 'X';
+    }
+    
+    
+    return answer;
+}
