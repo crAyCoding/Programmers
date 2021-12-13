@@ -1,0 +1,85 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<vector<int>> rotate(vector<vector<int>> key)
+{
+    int y = key.size();
+    int x = key[0].size();
+    vector<vector<int>> result;
+    for(int i=0;i<x;i++)
+    {
+        vector<int> new_x;
+        for(int j=y-1;j>=0;j--)
+        {
+            new_x.push_back(key[j][i]);
+        }
+        result.push_back(new_x);
+    }
+    return result;
+}
+
+bool solution(vector<vector<int>> key, vector<vector<int>> lock) {
+    bool answer = false;
+    int m = key.size();
+    int n = lock.size();
+    int vacant = 0;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(lock[i][j]==0) 
+            {
+                lock[i][j]=1;
+                vacant++;
+            }
+            else lock[i][j]=0;
+        }
+    }
+    if(vacant == 0) return true;
+    vector<vector<int>> nkey;
+    for(int i=0;i<m+2*n;i++)
+    {
+        vector<int> save;
+        for(int j=0;j<m+2*n;j++)
+        {
+            if(j>=n && j<m+n && i >=n && i < m+n)
+            {
+                save.push_back(key[i-n][j-n]);
+            }
+            else save.push_back(0);
+        }
+        nkey.push_back(save);
+    }
+    for(int num=0;num<5;num++)
+    {
+        for(int i=0;i<n+m;i++)
+        {
+            for(int j=0;j<n+m;j++)
+            {
+                int count = vacant;
+                for(int k=0;k<n;k++)
+                {
+                    for(int l=0;l<n;l++)
+                    {
+                        if(lock[k][l]==0 && nkey[i+k][j+l]==1)
+                        {
+                            count = 999999;
+                        }
+                        if(lock[k][l]==1 && nkey[i+k][j+l]==1)
+                        {
+                            count--;
+                            if(count == 0) return true;
+                        }
+                    }
+                }
+            }
+        }
+        nkey = rotate(nkey);
+    }
+    
+    
+    return answer;
+}
