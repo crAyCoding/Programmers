@@ -1,0 +1,85 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+struct info
+{
+    string genre;
+    int sum;
+    vector<pair<int,int>> play;
+};
+
+bool cmp(const info& a, const info& b)
+{
+    if(a.sum>b.sum) return true;
+    else return false;
+}
+
+bool cmp2(const pair<int,int>& a, const pair<int,int> & b)
+{
+    if(a.first>b.first)
+    {
+        return true;
+    }
+    else if(a.first == b.first)
+    {
+        if(a.second<b.second) return true;
+        else return false;
+    }
+    else return false;
+}
+
+
+
+
+vector<int> solution(vector<string> genres, vector<int> plays) {
+    vector<int> answer;
+    vector<info> infos;
+    for(int i=0;i<genres.size();i++)
+    {
+        bool tmp = true;
+        for(int j=0;j<infos.size();j++)
+        {
+            if(infos[j].genre == genres[i])
+            {
+                infos[j].sum += plays[i];
+                pair<int,int> b;
+                b.first = plays[i];
+                b.second = i;
+                infos[j].play.push_back(b);
+                tmp = false;
+                break;
+            }
+        }
+        if(tmp)
+        {
+            info a;
+            a.genre = genres[i];
+            a.sum = plays[i];
+            pair<int,int> b;
+            b.first = plays[i];
+            b.second = i;
+            a.play.push_back(b);
+            infos.push_back(a);    
+        }
+    }
+    
+    sort(infos.begin(),infos.end(),cmp);
+    for(int i=0;i<infos.size();i++)
+    {
+        sort(infos[i].play.begin(),infos[i].play.end(),cmp2);
+        int cnt = 0;
+        for(int j=0;j<infos[i].play.size();j++)
+        {
+            answer.push_back(infos[i].play[j].second);
+            if(++cnt == 2) break;
+        }
+    }
+    
+    
+    return answer;
+}
