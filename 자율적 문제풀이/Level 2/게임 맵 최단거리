@@ -1,0 +1,46 @@
+#include<vector>
+#include<queue>
+#include<cstring>
+#include<iostream>
+using namespace std;
+
+int nx[4] = {-1,0,1,0};
+int ny[4] = {0,-1,0,1};
+int save[101][101];
+
+
+int solution(vector<vector<int> > maps)
+{
+    int answer = 0;
+    int n = maps.size();
+    int m = maps[0].size();
+    queue<pair<int,int>> q;
+    q.push({0,0});
+    memset(save,10000,sizeof(save));
+    save[0][0] = 0;
+    while(!q.empty())
+    {
+        int x = q.front().first;
+        int y = q.front().second;
+        q.pop();
+        for(int i=0;i<4;i++)
+        {
+            int a = x + nx[i];
+            int b = y + ny[i];
+            
+            if(a<0||b<0||a>=n||b>=m) continue;
+            if(maps[a][b]==0) continue;
+            if(save[a][b] > save[x][y] + 1)
+            {
+                save[a][b] = save[x][y] + 1;
+                q.push({a,b});
+            }
+        }
+    }
+    if(save[n-1][m-1]==269488144) answer = -1;
+    else answer = save[n-1][m-1] + 1;
+    
+    
+    
+    return answer;
+}
