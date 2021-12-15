@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(int cacheSize, vector<string> cities) {
+    int answer = 0;
+    vector<string> save;
+    for(int i=0;i<cities.size();i++)
+    {
+        for(int j=0;j<cities[i].size();j++)
+        {
+            if(cities[i][j]>='A' && cities[i][j]<='Z') cities[i][j]+=32;
+        }
+    }
+    if(cacheSize == 0) return cities.size() * 5;
+    for(string k : cities)
+    {
+        bool tf = true;
+        for(int i=0;i<save.size();i++)
+        {
+            if(save[i]==k)
+            {
+                save.erase(save.begin() + i);
+                answer += 1;
+                tf = false;
+            }
+        }
+        if(tf)
+        {
+            answer += 5;
+            if(save.size()==cacheSize)
+            {
+                save.erase(save.begin());
+            }
+        }
+        save.push_back(k);
+    }
+    
+    return answer;
+}
