@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+string solution(int n, int t, int m, int p) {
+    string answer = "";
+    vector<int> turn;
+    vector<char> save;
+    for(int i=0;i<t;i++)
+    {
+        turn.push_back(p-1 + m * i);
+        //cout << turn.back() << endl;
+    }
+    save.push_back('0');
+    int now = 1;
+    while(save.size()<=turn.back())
+    {
+        int i = now;
+        string k = "";
+        while(i>0)
+        {
+            int t = i%n;
+            if(t>=10)
+            {
+                t += 55;
+                k += (char)t;
+            }
+            else k += (char)(t+48);
+            i /= n;
+        }
+        reverse(k.begin(),k.end());
+        for(int j=0;j<k.size();j++)
+        {
+            save.push_back(k[j]);
+        }
+        now++;
+    }
+    for(int i=0;i<t;i++)
+    {
+        answer += save[turn[i]];
+    }
+    
+    return answer;
+}
