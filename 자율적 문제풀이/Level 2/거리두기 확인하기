@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+int nx[4] = {-1,0,1,0}; int ny[4] = {0,-1,0,1};
+int mx[4] = {-1,-1,1,1}; int my[4] = {-1,1,-1,1};
+int vx[4] = {-2,0,2,0}; int vy[4] = {0,-2,0,2};
+
+bool test(vector<string> k,int x,int y)
+{
+    for(int i=0;i<4;i++)
+    {
+        int na = x + nx[i]; int nb = y + ny[i];
+        if(na>=0 && na<5 && nb>=0 && nb<5)
+        {
+            if(k[na][nb]=='P') return false;
+        }
+        int ma = x + mx[i]; int mb = y + my[i];
+        if(ma>=0 && ma<5 && mb>=0 && mb<5)
+        {
+            if(k[ma][mb]=='P' && !(k[ma][y]=='X' && k[x][mb]=='X')) return false;
+        }
+        int va = x + vx[i]; int vb = y + vy[i];
+        if(va>=0 && va<5 && vb>=0 && vb<5)
+        {
+            if(k[va][vb]=='P' && k[(x+va)/2][(y+vb)/2] == 'O') return false; 
+        }
+    }
+    
+    return true;
+}
+
+
+vector<int> solution(vector<vector<string>> places) {
+    vector<int> answer;
+    for(vector<string> k : places)
+    {
+        bool tf = true;
+        for(int x=0;x<5;x++)
+        {
+            for(int y=0;y<5;y++)
+            {
+                if(k[x][y]=='P') tf = test(k,x,y);
+                if(!tf)
+                {
+                    answer.push_back(0);
+                    x = 5; break;
+                }
+            }
+        }
+        if(tf) answer.push_back(1);
+    }
+    return answer;
+}
