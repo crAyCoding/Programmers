@@ -1,0 +1,56 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+struct info
+{
+    int a; // 길이
+    int b; // 무게
+};
+
+int solution(int bridge_length, int weight, vector<int> truck_weights) {
+    int answer = 0;
+    vector<info> save;
+    int now = 0;
+    for(int k : truck_weights)
+    {
+        info in;
+        in.a = bridge_length;
+        in.b = k;
+        if(now + k <= weight)
+        {
+            for(int j=0;j<save.size();j++)
+            {
+                save[j].a --;
+            }
+            if(!save.empty() && save[0].a==0)
+            {
+                now -= save[0].b;
+                save.erase(save.begin());
+            }
+            save.push_back(in);
+            answer++;
+            now += k;
+        }
+        else
+        {
+            while(now + k > weight)
+            {
+                int min = save[0].a;
+                now -= save[0].b;
+                answer += min;
+                for(int j=0;j<save.size();j++)
+                {
+                    save[j].a -= min;
+                }
+                save.erase(save.begin());
+            }
+            save.push_back(in);
+            now += k;
+        }
+    }
+    answer += bridge_length;
+    return answer;
+}
