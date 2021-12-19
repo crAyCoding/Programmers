@@ -1,0 +1,41 @@
+#include <string>
+#include <vector>
+#include <stack>
+#include <iostream>
+
+
+using namespace std;
+
+int solution(string s) {
+    int answer = 0;
+    vector<int> k;
+    for(int i=0;i<s.size();i++)
+    {
+        if(s[i]=='(') k.push_back(-1);
+        if(s[i]==')') k.push_back(1);
+        if(s[i]=='{') k.push_back(-2);
+        if(s[i]=='}') k.push_back(2);
+        if(s[i]=='[') k.push_back(-3);
+        if(s[i]==']') k.push_back(3);
+    }
+    
+    for(int i=0;i<k.size();i++)
+    {
+        stack<int> st;
+        for(int j=0;j<k.size();j++)
+        {
+            if(st.empty()) st.push(k[j]);
+            else if(st.top() < 0 && st.top() + k[j] == 0)
+            {
+                st.pop();
+            }
+            else st.push(k[j]);
+        }
+        if(st.empty()) answer++;
+        
+        k.push_back(k.front());
+        k.erase(k.begin());
+    }
+    
+    return answer;
+}
