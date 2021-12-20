@@ -1,0 +1,68 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+map<string,int> save;
+
+void combination(string str, vector<char> co, int r, int idx, int dep)
+{
+    if(r==0)
+    {
+        string sstr = "";
+        for(int i=0;i<co.size();i++) sstr += co[i];
+        sort(sstr.begin(),sstr.end());
+        auto ff = save.find(sstr);
+        if(ff!=save.end())
+        {
+            ff->second++;
+        }
+        else
+        {
+            save.insert({sstr,1});
+        }
+    }
+    else if(dep == str.size())
+    {
+        
+    }
+    else
+    {
+        co[idx] = str[dep];
+        combination(str,co,r-1,idx+1,dep+1);
+        combination(str,co,r,idx,dep+1);
+    }
+}
+
+vector<string> solution(vector<string> orders, vector<int> course) {
+    vector<string> answer;
+    for(int c : course)
+    {
+        vector<char> co(c);
+        for(string str : orders)
+        {
+            combination(str,co,c,0,0);
+        }
+        int max = -1;
+        for(map<string,int>::iterator it = save.begin();it!=save.end();it++)
+        {
+            if(max < it->second) max = it->second;
+        }
+        if(max>1)
+        {
+            for(map<string,int>::iterator it = save.begin();it!=save.end();it++)
+            {
+                if(it->second == max)
+                {
+                    answer.push_back(it->first);
+                }
+            }
+        }
+        save.clear();
+    }
+    sort(answer.begin(),answer.end());
+    return answer;
+}
