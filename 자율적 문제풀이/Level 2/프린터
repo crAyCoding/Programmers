@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(vector<int> priorities, int location) {
+    int answer = 0;
+    while(true)
+    {
+        answer++;
+        int max = -1;
+        for(int i : priorities)
+        {
+            if(i>max) max = i;
+        }
+        vector<int> st;
+        for(int i=0;i<priorities.size();i++)
+        {
+            if(priorities[i]==max)
+            {
+                if(location == 0) return answer;
+                vector<int> s;
+                for(int j=i+1;j<priorities.size();j++)
+                {
+                    s.push_back(priorities[j]);
+                }
+                for(int j=0;j<st.size();j++)
+                {
+                    s.push_back(st[j]);
+                }
+                location--;
+                priorities = s;
+                break;
+            }
+            else
+            {
+                st.push_back(priorities[i]);
+                if(location==0)
+                {
+                    location = priorities.size() - 1;
+                }
+                else location--;
+            }
+        }
+    }
+    return answer;
+}
