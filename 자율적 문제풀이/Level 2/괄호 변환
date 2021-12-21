@@ -1,0 +1,57 @@
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+bool correct(string u)
+{
+    stack<char> st;
+    for(char i : u)
+    {
+        if(st.empty()) st.push(i);
+        else
+        {
+            if(st.top() == '(' && i == ')')
+            {
+                st.pop();
+            }
+            else st.push(i);
+        }
+    }
+    if(st.empty()) return true;
+    else return false;
+}
+
+string fin(string w)
+{
+    if(w.empty()) return "";
+    string u="",v="";
+    int ll=0,rr=0,cnt=0;
+    for(;cnt<w.size();cnt++)
+    {
+        if(w[cnt]=='(') ll++;
+        else rr++;
+        if(ll==rr) break;
+    }
+    u = w.substr(0,cnt+1);
+    v = w.substr(cnt+1,w.size()-cnt-1);
+    if(correct(u))
+    {
+        return u + fin(v);
+    }
+    else
+    {
+        for(int i=0;i<u.size();i++)
+        {
+            if(u[i]=='(') u[i]=')';
+            else u[i] = '(';
+        }
+        return "(" + fin(v) + ")" + u.substr(1,u.size()-2);
+    }
+}
+
+string solution(string p) {
+    string answer = fin(p);
+    return answer;
+}
