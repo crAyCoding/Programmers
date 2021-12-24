@@ -16,5 +16,3 @@ int solution(string s)
 
     return answer;
 }
-
-//LV2
