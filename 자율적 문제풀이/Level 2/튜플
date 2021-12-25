@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+bool cmp(string a, string b)
+{
+    if(a.size()<b.size()) return true;
+    else return false;
+}
+
+vector<int> solution(string s) {
+    vector<int> answer;
+    vector<string> t;
+    s.erase(0,1); s.erase(s.size()-1,1);
+    int cnt = 0;
+    for(int i=0;i<s.size();i++)
+    {
+        if(s.find('{')!=string::npos)
+        {
+            int l = s.find('{'), r = s.find('}');
+            t.push_back(s.substr(l+1,r-l-1));
+            s = s.substr(r+1,s.size()-r-1);
+        }
+        else t.push_back(s);
+    }
+    sort(t.begin(),t.end(),cmp);
+    map<int,int> m;
+    for(int i=0;i<t.size();i++)
+    {
+        for(int j=0;j<t[i].size();j++) if(t[i][j]==',') t[i][j] = ' ';
+        stringstream sstr;
+        int num;
+        sstr.str(t[i]);
+        while(sstr >> num)
+        {
+            auto ff = m.find(num);
+            if(ff != m.end())
+            {
+                continue;
+            }
+            else
+            {
+                m.insert({num,1});
+                answer.push_back(num);
+            }
+        }
+    }
+    return answer;
+}
