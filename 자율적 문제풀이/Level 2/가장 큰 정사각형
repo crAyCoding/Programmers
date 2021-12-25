@@ -1,0 +1,40 @@
+#include <iostream>
+#include<vector>
+using namespace std;
+
+int min(int a, int b , int c)
+{
+    if(a<b)
+    {
+        if(a<c) return a;
+        else return c;
+    }
+    else
+    {
+        if(b<c) return b;
+        else return c;
+    }
+}
+
+int solution(vector<vector<int>> board)
+{
+    int answer = 0;
+    int col = board.size(), row = board[0].size();
+    int max = 0;
+    for(int i=0;i<col;i++)
+    {
+        for(int j=0;j<row;j++)
+        {
+            if(board[i][j]==0) continue;
+            int a=0,b=0,c=0;
+            if(i>0&&j>0) b = board[i-1][j-1];
+            if(i>0) a = board[i-1][j];
+            if(j>0) c = board[i][j-1];
+            board[i][j] = min(a,b,c) + 1;
+            if(max<board[i][j]) max = board[i][j];
+        }
+    }
+    answer = max * max;
+
+    return answer;
+}
