@@ -1,0 +1,109 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+
+int solution(vector<vector<string>> relation) {
+    int answer = 0;
+    int col = relation[0].size(), row = relation.size();
+    vector<vector<int>> c;
+    vector<int> s;
+    for(int i=0;i<col;i++) s.push_back(i);
+    for(int i=1;i<=col;i++)
+    {
+        vector<bool> p(col-i,false);
+        p.insert(p.end(),i,true);
+        do
+        {
+            vector<int> save;
+            for(int k=0;k<col;k++)
+            {
+                if(p[k]) save.push_back(s[k]);
+            }
+            c.push_back(save);
+        }while(next_permutation(p.begin(),p.end()));
+    }
+    vector<vector<int>> fin;
+    for(vector<int> v : c)
+    {
+        map<string,int> m;
+        for(int i=0;i<row;i++)
+        {
+            string str = "";
+            for(int k : v)
+            {
+                str += relation[i][k] + ',';
+            }
+            auto ff = m.find(str);
+            if(ff!=m.end()) break;
+            else
+            {
+                m.insert({str,1});
+            }
+        }
+        if(m.size() == row)
+        {
+            fin.push_back(v);
+        }
+    }
+    vector<vector<int>> ff;
+    for(int i=0;i<fin.size();i++)
+    {
+        vector<int> f;
+        for(int k=0;k<col;k++) f.push_back(0);
+        for(int j=0;j<fin[i].size();j++)
+        {
+            f[fin[i][j]]++;
+        }
+        ff.push_back(f);
+    }
+    
+    while(true)
+    {
+        vector<int> cmp;
+        vector<vector<int>> fff;
+        for(int i=0;i<col;i++)
+        {
+            if(ff[0][i]==1)
+            {
+                cmp.push_back(i);
+            }
+        }
+        for(int i=1;i<ff.size();i++)
+        {
+            bool tf = false;
+            for(int j : cmp)
+            {
+                if(ff[i][j]==0) 
+                {
+                    tf = true;
+                    break;
+                }
+            }
+            if(tf)
+            {
+                fff.push_back(ff[i]);
+            }
+        }
+        ff = fff;
+        answer++;
+        if(ff.size()==0) break;
+    }
+    
+    /*
+    for(int i=0;i<ff.size();i++)
+    {
+        for(int j=0;j<ff[i].size();j++)
+        {
+            cout << ff[i][j];
+        }
+        cout << endl;
+    }
+    */
+    
+    return answer;
+}
