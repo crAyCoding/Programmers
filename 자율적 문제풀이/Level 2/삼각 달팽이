@@ -1,0 +1,62 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(int n) {
+    vector<int> answer;
+    int** arr;
+    arr = (int**)calloc(n,sizeof(int*));
+    for(int i=0;i<n;i++) arr[i] = (int*)calloc(n,sizeof(int));
+    int sum = n * (n+1) / 2;
+    int cnt = 0, rotate = 0, x = 0, y = 0, temp = n;
+    for(int i=1;i<=sum;i++)
+    {
+        if(rotate%3==0)
+        {
+            arr[x++][y] = i;
+            cnt++;
+            if(cnt == n)
+            {
+                n--;
+                cnt = 0;
+                rotate++;
+                x--; y++;
+            }
+        }
+        else if(rotate%3==1)
+        {
+            arr[x][y++] = i;
+            cnt++;
+            if(cnt == n)
+            {
+                n--;
+                cnt = 0;
+                rotate++;
+                y-=2;
+                x--;
+            }
+        }
+        else
+        {
+            arr[x--][y--] = i;
+            cnt++;
+            if(cnt == n)
+            {
+                n--;
+                cnt = 0;
+                rotate++;
+                x+=2; y++;
+            }
+        }
+    }
+    for(int i=0;i<temp;i++)
+    {
+        for(int j=0;j<temp;j++)
+        {
+            if(arr[i][j]!=0) answer.push_back(arr[i][j]);
+        }
+    }
+    
+    return answer;
+}
