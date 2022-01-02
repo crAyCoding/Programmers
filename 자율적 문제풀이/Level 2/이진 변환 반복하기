@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> binary(string s, int count, int deleted)
+{
+    if(s=="1")
+    {
+        vector<int> t;
+        t.push_back(count); t.push_back(deleted);
+        return t;
+    }
+    int size = 0;
+    string str = "";
+    for(int i=0;i<s.size();i++)
+    {
+        if(s[i]=='0') deleted++;
+        else size++;
+    }
+    
+    while(size>0)
+    {
+        str += to_string(size%2);
+        size/=2;
+    }
+    return binary(str,count+1,deleted);
+}
+
+
+vector<int> solution(string s) {
+    vector<int> answer;
+    answer = binary(s,0,0);
+    return answer;
+}
