@@ -1,0 +1,71 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct info
+{
+    string s;
+    string head;
+    int number;
+};
+
+string change(string str)
+{
+    for(int i=0;i<str.size();i++)
+    {
+        if(str[i]>='A' && str[i]<='Z') str[i]+=32;
+    }
+    return str;
+}
+
+bool cmp(info a,info b)
+{
+    if(a.head < b.head) return true;
+    else if (a.head > b.head) return false;
+    else
+    {
+        if(a.number < b.number) return true;
+        else return false;
+    }
+}
+
+
+vector<string> solution(vector<string> files) {
+    vector<string> answer;
+    vector<info> result;
+    for(string str : files)
+    {
+        int l = -1,r = -1;
+        bool temp = true;
+        for(int i=0;i<str.size();i++)
+        {
+            if(str[i]>='0' && str[i]<='9' && temp)
+            {
+                l = i;
+                temp = false;
+            }
+            if(!(str[i]>='0' && str[i]<='9') && !temp)
+            {
+                r = i;
+                break;
+            }
+        }
+        info in;
+        in.s = str;
+        in.head = change(str.substr(0,l));
+        if(r>0)
+        {
+            in.number = stoi(str.substr(l,r-l));
+        }
+        else
+        {
+            in.number = stoi(str.substr(l,str.size()-l));
+        }
+        result.push_back(in);
+    }
+    stable_sort(result.begin(),result.end(),cmp);
+    for(info a : result) answer.push_back(a.s);
+    return answer;
+}
