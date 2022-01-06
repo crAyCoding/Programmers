@@ -1,0 +1,29 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+long long pow2(int n)
+{
+    if(n<0) return 1;
+    long long i = 1;
+    while(n--) i *= 2;
+    return i;
+}
+
+vector<long long> solution(vector<long long> numbers) {
+    vector<long long> answer;
+    
+    for(long long i : numbers)
+    {
+        int n = 0;
+        long long temp = i;
+        while(i%2!=0)
+        {
+            n++;
+            i/=2;
+        }
+        answer.push_back(temp + pow2(n-1));
+    }
+    return answer;
+}
