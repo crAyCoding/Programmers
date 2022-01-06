@@ -1,0 +1,64 @@
+#include <vector>
+#include <cstring>
+
+using namespace std;
+
+bool visited[100][100];
+int array[100][100];
+int a,b;
+int result, max_area, num_area;
+
+void initiate(int m,int n);
+void check(int x, int y);
+
+void initiate(int m, int n)
+{
+    a = m;
+    b = n;
+    result = 0;
+    max_area = 0;
+    num_area = 0;
+    memset(visited,false,sizeof(visited));
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(visited[i][j]==false && array[i][j]!=0)
+            {
+                check(i,j);
+                if(result > max_area) max_area = result;
+                num_area++;
+                result = 0;
+            }
+        }
+    }
+
+}
+
+void check(int x, int y)
+{
+    result++;
+    visited[x][y] = true;
+    int now = array[x][y];
+    if(x>0 && visited[x-1][y] == false && array[x-1][y] == now) check(x-1,y);
+    if(y>0 && visited[x][y-1] == false && array[x][y-1] == now) check(x,y-1);
+    if(x+1<a && visited[x+1][y] == false && array[x+1][y] == now) check(x+1,y);
+    if(y+1<b && visited[x][y+1] == false && array[x][y+1] == now) check(x,y+1);
+}
+
+// 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
+vector<int> solution(int m, int n, vector<vector<int>> picture) {
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            array[i][j] = picture[i][j];
+        }
+    }
+    initiate(m,n);
+    
+    vector<int> answer(2);
+    answer[0] = num_area;
+    answer[1] = max_area;
+    return answer;
+}
