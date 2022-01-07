@@ -1,0 +1,51 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(int rows, int columns, vector<vector<int>> queries) {
+    vector<int> answer;
+    vector<vector<int>> arr;
+    int start = 1;
+    for(int i=0;i<rows;i++)
+    {
+        vector<int> v;
+        for(int j=0;j<columns;j++)
+        {
+            v.push_back(start++);
+        }
+        arr.push_back(v);
+    }
+    for(vector<int> q : queries)
+    {
+        int x1 = q[0]-1;  int y1 = q[1]-1;
+        int x2 = q[2]-1;  int y2 = q[3]-1;
+        int min = 100001;
+        vector<vector<int>> change = arr;
+        for(int i=y1+1;i<=y2;i++)   
+        {
+            change[x1][i] = arr[x1][i-1];
+            if(arr[x1][i-1]<min) min = arr[x1][i-1];
+        }
+        for(int i=x1+1;i<=x2;i++)   
+        {
+            change[i][y2] = arr[i-1][y2];
+            if(arr[i-1][y2]<min) min = arr[i-1][y2];
+        }
+        for(int i=y2-1;i>=y1;i--)   
+        {
+            change[x2][i] = arr[x2][i+1];
+            if(arr[x2][i+1]<min) min = arr[x2][i+1];
+        }
+        for(int i=x2-1;i>=x1;i--)   
+        {
+            change[i][y1] = arr[i+1][y1];
+            if(arr[i+1][y1]<min) min = arr[i+1][y1];
+        }
+        arr = change;
+        answer.push_back(min);
+    }
+    
+    
+    return answer;
+}
