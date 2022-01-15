@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+
+using namespace std;
+
+string jinsu(int n,int k)
+{
+    string result = "";
+    while(n>0)
+    {
+        result += to_string(n%k);
+        n/=k;
+    }
+    reverse(result.begin(),result.end());
+    return result;
+}
+
+bool check_prime(string str)
+{
+    long long n = stoll(str);
+    if(n==1) return false;
+    for(int i=2;i<=sqrt(n);i++)
+    {
+        if(n%i==0) return false;
+    }
+    return true;
+}
+
+int solution(int n, int k) {
+    int answer = 0;
+    string str = jinsu(n,k);
+    vector<string> numbers;
+    for(int i=0;i<str.size();i++)
+    {
+        if(str[i]=='0') continue;
+        else
+        {
+            string now = "";
+            while(str[i]!='0' && i<=str.size())
+            {
+                now+=str[i];
+                i++;
+            }
+            numbers.push_back(now);
+        }
+    }
+    for(string now : numbers)
+    {
+        if(check_prime(now)) answer++;
+    }
+    return answer;
+}
