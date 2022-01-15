@@ -1,0 +1,64 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+
+
+vector<int> solution(vector<int> fees, vector<string> records) {
+    vector<int> answer;
+    map<string,int> car,result;
+    int maxtime = 23 * 60 + 59;
+    for(string str : records)
+    {
+        int time = stoi(str.substr(0,2)) * 60 + stoi(str.substr(3,2));
+        string number = str.substr(6,4);
+        if(str.back()=='N')
+        {
+            car.insert({number,time});
+        }
+        else
+        {
+            auto ff = car.find(number);
+            time -= ff->second;
+            auto f = result.find(number);
+            if(f!=result.end())
+            {
+                f->second += time;
+            }
+            else
+            {
+                result.insert({number,time});
+            }
+            car.erase(number);
+        }
+    }
+    for(map<string,int>::iterator it = car.begin();it!=car.end();it++)
+    {
+        auto ff = result.find(it->first);
+        if(ff!=result.end())
+        {
+            ff->second += maxtime - it->second;
+        }
+        else
+        {
+            result.insert({it->first,maxtime - it->second});
+        }
+    }
+    int ordi_time = fees[0], ordi_fee = fees[1];
+    int extra_time = fees[2], extra_fee = fees[3];
+    for(map<string,int>::iterator it = result.begin();it!=result.end();it++)
+    {
+        int t = it->second;
+        int ordinary = ordi_time;
+        int cash = ordi_fee;
+        while(t>ordinary)
+        {
+            ordinary += extra_time;
+            cash += extra_fee;
+        }
+        answer.push_back(cash);
+    }
+    return answer;
+}
