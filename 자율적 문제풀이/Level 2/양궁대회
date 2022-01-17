@@ -1,0 +1,79 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int maximum_score = -1;
+vector<int> shot,scores;
+vector<vector<int>> results;
+
+void dfs(vector<int> result,int score,int temp,int n)
+{
+    if(score>maximum_score) maximum_score = score;
+    if(n==0)
+    {
+        results.push_back(result);
+        scores.push_back(score);
+        return;
+    }
+    else if(temp==10)
+    {
+        result[temp] = n;
+        results.push_back(result);
+        scores.push_back(score);
+        return;
+    }
+    else
+    {
+        dfs(result,score,temp+1,n);
+        if(shot[temp]<=n)
+        {
+            result[temp] = shot[temp];
+            n -= result[temp];
+            int now_score = (10-temp);
+            if(result[temp]>1) now_score *= 2;
+            dfs(result,score + now_score,temp+1,n);
+        }
+    }
+}
+
+vector<int> solution(int n, vector<int> info) {
+    vector<int> answer;
+    vector<int> result;
+    int apeach = 0;
+    for(int i=0;i<11;i++)
+    {
+        result.push_back(0);
+        shot.push_back(info[i]+1);
+        if(info[i]) apeach += 10-i;
+    }
+    dfs(result,0,0,n);
+    if(maximum_score <= apeach) return {-1};
+    vector<vector<int>> final_result;
+    for(int i=0;i<scores.size();i++)
+    {
+        if(scores[i]==maximum_score)
+        {
+            final_result.push_back(results[i]);
+        }
+    }
+    for(int i=10;i>=0;i--)
+    {
+        if(final_result.size()==1) answer = final_result[0];
+        else
+        {
+            vector<vector<int>> temp;
+            int maxi = -1;
+            for(vector<int> v : final_result)
+            {
+                if(v[i]>maxi) maxi = v[i];
+            }
+            for(vector<int> v : final_result)
+            {
+                if(v[i]==maxi) temp.push_back(v);
+            }
+            final_result = temp;
+        }
+    }
+    return answer;
+}
