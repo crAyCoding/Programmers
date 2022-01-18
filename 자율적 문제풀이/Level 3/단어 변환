@@ -1,0 +1,38 @@
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+string finish;
+priority_queue<int,vector<int>,greater<int>> pq;
+
+void dfs(vector<string> word, string now, int times)
+{
+    if(now==finish)
+    {
+        pq.push(times);
+        return;
+    }
+    for(int i=0;i<word.size();i++)
+    {
+        int count = 0;
+        for(int j=0;j<word[i].size();j++)
+        {
+            if(word[i][j]!=now[j]) count++;
+        }
+        if(count==1)
+        {
+            vector<string> v = word;
+            v.erase(v.begin()+i);
+            dfs(v,word[i],times+1);
+        }
+    }
+}
+
+int solution(string begin, string target, vector<string> words) {
+    finish = target;
+    dfs(words,begin,0);
+    if(pq.empty()) return 0;
+    return pq.top();
+}
