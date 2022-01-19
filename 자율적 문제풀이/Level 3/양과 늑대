@@ -1,0 +1,44 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <queue>
+
+using namespace std;
+
+map<int,vector<int>> m;
+vector<int> animal;
+priority_queue<int> pq;
+
+void back(int now,vector<int> next,int sh, int wo)
+{
+    for(int i : m[now]) next.push_back(i);
+    for(int i=0;i<next.size();i++)
+    {
+        if(animal[next[i]]==0 || sh > wo+1)
+        {
+            vector<int> v = next;
+            v.erase(v.begin()+i);
+            if(animal[next[i]]) back(next[i],v,sh,wo+1);
+            else back(next[i],v,sh+1,wo);
+        }
+    }
+    pq.push(sh);
+}
+
+
+int solution(vector<int> info, vector<vector<int>> edges) {
+    int answer = 0;
+    animal = info;
+    for(int i=0;i<info.size();i++)
+    {
+        vector<int> v;
+        m.insert({i,v});
+    }
+    for(vector<int> v : edges)
+    {
+        m[v[0]].push_back(v[1]);
+    }
+    vector<int> v;
+    back(0,v,1,0);
+    return pq.top();
+}
