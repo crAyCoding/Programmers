@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string bbq(string id)
+{
+    string str = "";
+    for(int i=0;i<id.size();i++)
+    {
+        if(id[i]>='A'&&id[i]<='Z') id[i] += 32;
+        if(id[i]>='a'&&id[i]<='z') str+=id[i];
+        if(id[i]=='.' || id[i]=='-' || id[i]=='_' || id[i]=='.') str += id[i];
+        if(id[i]>='0' && id[i]<='9') str += id[i];
+    }
+    while(true)
+    {
+        int ff = str.find("..");
+        if(ff<0) break;
+        str.erase(ff,1);
+    }
+    while(!str.empty() && str.front()=='.')
+    {
+        str = str.substr(1,str.size()-1);
+    }
+    while(!str.empty() && str.back()=='.')
+    {
+        str = str.substr(0,str.size()-1);
+    }
+    if(str.empty()) str += 'a';
+    if(str.size()>=16) str = str.substr(0,15);
+    while(!str.empty() && str.back()=='.')
+    {
+        str = str.substr(0,str.size()-1);
+    }
+    while(str.size()<=2) str += str.back();
+    return str;
+}
+
+
+string solution(string new_id) {
+    string answer = "";
+    return bbq(new_id);
+}
+
+//LV 1
