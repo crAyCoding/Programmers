@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+vector<int> solution(vector<string> operations) {
+    priority_queue<int> max,temp_max;
+    priority_queue<int,vector<int>,greater<int>> min,temp_min;
+    int cnt = 0;
+    for(string str : operations)
+    {
+        if(cnt==0)
+        {
+            max = temp_max;
+            min = temp_min;
+        }
+        if(str[0] == 'I')
+        {
+            int number = stoi(str.substr(2,str.size()-2));
+            max.push(number);
+            min.push(number);
+            cnt++;
+        }
+        else if(cnt!=0 && str[2]=='-')
+        {
+            min.pop();
+            cnt--;
+        }
+        else if(cnt!=0 && str[2] == '1')
+        {
+            max.pop();
+            cnt--;
+        }
+        else continue;
+    }
+    if(cnt) return {max.top(),min.top()};
+    else return {0,0};
+}
