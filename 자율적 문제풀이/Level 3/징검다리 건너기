@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(vector<int> stones, int k) {
+    int answer = 0;
+    int mini = 1, maxi = 200000000;
+    while(mini <= maxi)
+    {
+        bool tf = false;
+        int middle = (mini + maxi) / 2;
+        int count = 0;
+        for(int i=0;i<stones.size();i++)
+        {
+            if(stones[i]>=middle) count = 0;
+            else
+            {
+                count++;
+                if(count >= k)
+                {
+                    tf = true;
+                    break;
+                }
+            }
+        }
+        if(tf) maxi = middle - 1;
+        else 
+        {
+            mini = middle + 1;
+            answer = middle;
+        }
+    }
+    return answer;
+}
