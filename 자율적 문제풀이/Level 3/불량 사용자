@@ -1,0 +1,49 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+
+using namespace std;
+
+vector<string> banned;
+map<vector<string>,int> m;
+
+bool check(string id1, string id2)
+{
+    if(id1.size()!=id2.size()) return false;
+    for(int i=0;i<id1.size();i++)
+    {
+        if(!(id1[i]==id2[i] || id2[i]=='*')) return false;
+    }
+    return true;
+}
+
+void test(vector<string> user,vector<string> ban,int temp)
+{
+    if(temp==banned.size())
+    {
+        sort(ban.begin(),ban.end());
+        m.insert({ban,1});
+        return;
+    }
+    for(int i=0;i<user.size();i++)
+    {
+        if(check(user[i],banned[temp]))
+        {
+            vector<string> v = user;
+            vector<string> vv = ban;
+            vv.push_back(user[i]);
+            v.erase(v.begin() + i);
+            test(v,vv,temp+1);
+        }
+    }
+}
+
+int solution(vector<string> user_id, vector<string> banned_id) {
+    int answer = 0;
+    banned = banned_id;
+    vector<string> v;
+    test(user_id,v,0);
+    answer = m.size();
+    return answer;
+}
