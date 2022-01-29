@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int land[101] = {0,};
+
+int test(int n)
+{
+    if(land[n]==n) return n;
+    return land[n] = test(land[n]);
+}
+
+bool compare(vector<int> a, vector<int> b)
+{
+    if(a[2]<b[2]) return true;
+    else return false;
+}
+
+int solution(int n, vector<vector<int>> costs) {
+    int answer = 0;
+    sort(costs.begin(),costs.end(),compare);
+    for(int i=0;i<n;i++) land[i] = i;
+    for(vector<int> v : costs)
+    {
+        int p = test(v[0]), q = test(v[1]);
+        if(p!=q)
+        {
+            answer += v[2];
+            land[q] = p;
+        }
+    }
+    return answer;
+}
