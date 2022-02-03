@@ -1,0 +1,37 @@
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+int solution(string s) {
+    int answer = 1e9;
+    int n = s.size();
+    while(n>0)
+    {
+        string str = s;
+        string result = "";
+        stack<string> q;
+        int cnt = 1;
+        while(str.size() >= n)
+        {
+            string now = str.substr(0,n);
+            if(q.empty()) q.push(now);
+            else if(q.top()==now)   cnt++;
+            else
+            {
+                if(cnt>1) result += to_string(cnt);
+                result += q.top();
+                q.pop();
+                q.push(now);
+                cnt = 1;
+            }
+            str = str.substr(n,str.size()-n);
+        }
+        if(cnt>1) result += to_string(cnt);
+        result += q.top() + str;
+        if(result.size()<answer) answer = result.size();
+        n--;
+    }
+    return answer;
+}
