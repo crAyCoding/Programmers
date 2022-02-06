@@ -1,0 +1,90 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+map<string,vector<int>> m;
+vector<int> v;
+
+vector<int> solution(vector<string> info, vector<string> query) {
+    vector<int> answer;
+    for(string s : info)
+    {
+        vector<int> blank;
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]==' ') blank.push_back(i);
+        }
+        string c1 = s.substr(0,blank[0]);
+        string c2 = s.substr(blank[0]+1,blank[1]-blank[0]-1);
+        string c3 = s.substr(blank[1]+1,blank[2]-blank[1]-1);
+        string c4 = s.substr(blank[2]+1,blank[3]-blank[2]-1);
+        int score = stoi(s.substr(blank[3]+1,s.size()-blank[3]-1));
+        for(int a=0;a<2;a++)
+        {
+            for(int b=0;b<2;b++)
+            {
+                for(int c=0;c<2;c++)
+                {
+                    for(int d=0;d<2;d++)
+                    {
+                        string str = "";
+                        if(a==0) str += c1;
+                        else str += "-";
+                        if(b==0) str += c2;
+                        else str += "-";
+                        if(c==0) str += c3;
+                        else str += "-";
+                        if(d==0) str += c4;
+                        else str += "-";
+                        auto f = m.find(str);
+                        if(f==m.end())
+                        {
+                            m.insert({str,v});
+                        }
+                        m[str].push_back(score);
+                    }
+                }
+            }
+        }
+    }
+    for(map<string,vector<int>>::iterator it = m.begin();it!=m.end();it++)
+    {
+        sort(it->second.begin(),it->second.end());
+    }
+    for(string s : query)
+    {
+        string q = "";
+        int score;
+        vector<int> blank;
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]==' ') blank.push_back(i);
+        }
+        q = s.substr(0,blank[0]) + s.substr(blank[1]+1,blank[2]-blank[1]-1)
+            + s.substr(blank[3]+1,blank[4]-blank[3]-1)
+            + s.substr(blank[5]+1,blank[6]-blank[5]-1);
+        score = stoi(s.substr(blank[6]+1,s.size()-blank[6]-1));
+        vector<int> check = m[q];
+        int l = 0, r = check.size()-1;
+        int result = 0;
+        while(l<=r)
+        {
+            int mid = (l+r)/2;
+            if(check[mid]>=score)
+            {
+                r = mid - 1;
+                result = check.size()-mid;
+            }
+            else
+            {
+                l = mid + 1;
+            }
+        }
+        answer.push_back(result);
+    }
+    return answer;
+}
