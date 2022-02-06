@@ -1,0 +1,43 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+map<string,int> dictionary;
+
+
+vector<int> solution(string msg) {
+    vector<int> answer;
+    int cnt = 1;
+    for(int i=0;i<26;i++)
+    {
+        char k = 'A' + i;
+        string s = "";
+        s += k;
+        dictionary.insert({s,cnt++});
+    }
+    for(int i=0;i<msg.size();i++)
+    {
+        string str = "";
+        str += msg[i];
+        while(true)
+        {
+            auto f = dictionary.find(str + msg[i+1]);
+            if(f!=dictionary.end())
+            {
+                str += msg[i+1];
+                i++;
+            }
+            else break;
+        }
+        answer.push_back(dictionary[str]);
+        if(i<msg.size())
+        {
+            str += msg[i+1];
+            dictionary.insert({str,cnt++});
+        }
+    }
+    return answer;
+}
