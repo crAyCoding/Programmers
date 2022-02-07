@@ -1,0 +1,71 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+struct node
+{
+    int x,y,n;
+    node* l = NULL;
+    node* r = NULL;
+};
+
+vector<int> pre,post;
+
+bool cmp(node a,node b)
+{
+    if(a.y==b.y) return a.x < b.x;
+    return a.y > b.y;
+}
+
+void make_tree(node* p,node* c)
+{
+    if(c->x < p->x)
+    {
+        if(p->l == NULL) p->l = c;
+        else make_tree(p->l,c);
+    }
+    else
+    {
+        if(p->r == NULL) p->r = c;
+        else make_tree(p->r,c);
+    }
+}
+
+void preorder(node* n)
+{
+    if(n==NULL) return;
+    pre.push_back(n->n);
+    preorder(n->l);
+    preorder(n->r);
+}
+
+void postorder(node* n)
+{
+    if(n==NULL) return;
+    postorder(n->l);
+    postorder(n->r);
+    post.push_back(n->n);
+}
+
+
+vector<vector<int>> solution(vector<vector<int>> nodeinfo) {
+    vector<node> tree;
+    node* root;
+    for(int i=0;i<nodeinfo.size();i++)
+    {
+        node now;
+        now.x = nodeinfo[i][0];
+        now.y = nodeinfo[i][1];
+        now.n = i+1;
+        tree.push_back(now);
+    }
+    sort(tree.begin(),tree.end(),cmp);
+    root = &tree[0];
+    for(int i=1;i<tree.size();i++)  make_tree(root,&tree[i]);
+    preorder(root);
+    postorder(root);
+    return {pre,post};
+}
