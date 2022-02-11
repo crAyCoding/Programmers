@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <unordered_set>
+
+using namespace std;
+
+
+int solution(int N, int number) {
+    int answer = -1;
+    int pasted = N;
+    unordered_set<int> arr[8];
+    for(int i=1;i<=8;i++)
+    {
+        arr[i-1].insert(pasted);
+        pasted = pasted*10+N;
+    }
+    for(int i=1;i<8;i++)
+    {
+        for(int j=0;j<i;j++)
+        {
+            for(int k : arr[j])
+            {
+                for(int l : arr[i-j-1])
+                {
+                    arr[i].insert(k+l);
+                    if(k>l) arr[i].insert(k-l);
+                    arr[i].insert(k*l);
+                    if(l!=0) arr[i].insert(k/l);
+                }
+            }
+        }
+    }
+    for(int i=0;i<8;i++)
+    {
+        for(int k : arr[i])
+        {
+            if(k==number)
+            {
+                answer = i+1;
+                i = 8;
+                break;
+            }
+        }
+    }
+    return answer;
+}
