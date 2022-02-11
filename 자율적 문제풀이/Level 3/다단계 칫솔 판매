@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+struct info
+{
+    string up = "";
+    int money = 0;
+};
+
+map<string,info> m;
+
+void dadange(string s,int sell)
+{
+    int next = sell / 10;
+    int mine = sell - next;
+    m[s].money += mine;
+    if(next==0) return;
+    if(m[s].up=="") return;
+    else dadange(m[s].up,next);
+}
+
+vector<int> solution(vector<string> enroll, vector<string> referral, vector<string> seller, vector<int> amount) {
+    vector<int> answer;
+    for(int i=0;i<enroll.size();i++)
+    {
+        info new_info;
+        if(!(referral[i]=="-")) new_info.up = referral[i];
+        m.insert({enroll[i],new_info});
+    }
+    for(int i=0;i<seller.size();i++)
+    {
+        dadange(seller[i],amount[i]*100);
+    }
+    for(string s : enroll)
+    {
+        answer.push_back(m[s].money);
+    }
+    return answer;
+}
