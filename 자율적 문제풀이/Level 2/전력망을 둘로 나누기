@@ -1,0 +1,48 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+vector<int> tree[101];
+
+int bfs(int start,vector<bool> visited,int deleted)
+{
+    queue<int> q;
+    int count = 0;
+    q.push(start);
+    
+    while(!q.empty())
+    {
+        count++;
+        int now = q.front();
+        q.pop();
+        //cout << now << " , ";
+        visited[now] = true;
+        for(int i=0;i<tree[now].size();i++)
+        {
+            if(now == start && tree[now][i]==deleted) continue;
+            if(!visited[tree[now][i]]) q.push(tree[now][i]);
+        }
+    }
+    return count;
+}
+
+int solution(int n, vector<vector<int>> wires) {
+    int answer = 1e9;
+    for(vector<int> w : wires)
+    {
+        tree[w[0]].push_back(w[1]);
+        tree[w[1]].push_back(w[0]);
+    }
+    vector<bool> visited(n+1,false);
+    for(vector<int> w : wires)
+    {
+        int left = bfs(w[0],visited,w[1]);
+        int right = bfs(w[1],visited,w[0]);
+        answer = min(abs(right-left),answer);
+    }
+    return answer;
+}
