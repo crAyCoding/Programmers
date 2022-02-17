@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+
+
+vector<string> solution(vector<vector<int>> line) {
+    vector<string> answer;
+    int siz = line.size();
+    long long top = -1e12,bot = 1e12, right = -1e12, left = 1e12;
+    vector<pair<long long,long long>> star;
+    for(int i=0;i<siz-1;i++)
+    {
+        for(int j=i+1;j<siz;j++)
+        {
+            long long a = line[i][0], b = line[i][1], c = line[i][2];
+            long long d = line[j][0], e = line[j][1], f = line[j][2];
+            long long x,y;
+            long long aebd = a*e - b*d;
+            long long bfce = b*f - c*e;
+            long long cdaf = c*d - a*f;
+            if(aebd==0) continue;
+            if((bfce%aebd!=0) || (cdaf%aebd!=0)) continue;
+            x = bfce / aebd;
+            y = cdaf / aebd;
+            star.push_back({x,y});
+            if(y > top) top = y;
+            if(y < bot) bot = y;
+            if(x > right) right = x;
+            if(x < left) left = x;
+        }
+    }
+    long long row = top-bot+1;
+    long long col = right-left+1;
+    string str(col,'.');
+    answer.assign(row,str);
+    for(int i=0;i<star.size();i++)
+    {
+        long long y = star[i].second;
+        long long x = star[i].first;
+        answer[top - y][x - left] = '*';
+    }
+    return answer;
+}
